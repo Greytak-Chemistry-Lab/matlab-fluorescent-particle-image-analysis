@@ -7,7 +7,7 @@
 % University of South Carolina
 
 % This script allows you to:
-% - load a single image from a file
+% - load a single image from a file (demo is for 8-bit per channel)
 % - display auto-scaled, separated color channels with a colorbar
 % - select, clear, save, and load a polygon "region of interest" based on 
 %   the true color image or any of the channels 
@@ -70,7 +70,7 @@ titlestr = ['Input file ' rgbfile];
 clear red green blue merged
 merged = imread(fullfile(rgbpath,rgbfile));
 if(sRGB_flag)
-    merged=srgb2linear(merged);
+    merged=rgb2lin(merged);
 end
 red = merged(:,:,1);        
 green = merged(:,:,2); 
