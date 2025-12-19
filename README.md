@@ -14,4 +14,5 @@ University of South Carolina
 
 Email: greytak@sc.edu
 
-PS: The code has been primarily tested with Matlab version R2022b. However, please note that no guarantee is made of the functionality or correctness of any
+PS: The code has been primarily tested with Matlab version R2022b. However, please note that no guarantee is made of the functionality or correctness of any particular purpose.
+
