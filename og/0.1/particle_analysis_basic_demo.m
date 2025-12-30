@@ -58,11 +58,11 @@ sRGB_flag=0; % apply sRGB to linear correction (gamma correction) for levels
 
 % Choose file with dialog box:
 if(~exist('rgbpath'))
-    rgbpath=pwd;
+    rgbpath='jpg Images';
 end
 [rgbfile,rgbpath]=uigetfile('*.*','Select an image file',rgbpath);
 % rgbpath='..\example_data';  % full or relative path to folder where image is
-% rgbfile = '1-1-2s-1.jpg'; % name of RGB image file
+% rgbfile = 'ImageA.jpg'; % name of RGB image file
 
 titlestr = ['Input file ' rgbfile];
 
