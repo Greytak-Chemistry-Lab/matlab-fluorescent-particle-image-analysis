@@ -40,16 +40,16 @@ levels=0:255;
 %% define dataset
 
 % path for input file location [folder of jpg(s)]
-indir='D:\jpg Images\';
+indir='jpg Images';
 clear outfile 
 % path for output file location
-outdir=['D:\Output Text File\'];
+outdir='Output Files';
 outfile='test'; 
 
 
 % set up a list of files corresponding to a single (or each) experiment
 
-files=dir([indir '*.jpg']);
+files=dir(fullfile(indir,'*.jpg'));
 for(i=1:length(files))
     inputfile(i).rgbfile=files(i).name;
 end
@@ -58,7 +58,7 @@ end
 clear red merged
 roix=[];
 roiy=[];
-merged=imread([indir inputfile(1).rgbfile]);
+merged=imread(fullfile(indir,inputfile(1).rgbfile));
 red=merged(:,:,1);        
 myroi=logical(ones(size(red)));
 
@@ -89,7 +89,7 @@ titlestr=['Input file ' num2str(theinputfile)];
 
 % aggregate images
 clear red green blue merged
-merged=imread([indir inputfile(theinputfile).rgbfile]);
+merged=imread(fullfile(indir,inputfile(theinputfile).rgbfile));
 red=merged(:,:,1);        
 green=merged(:,:,2); 
 blue=merged(:,:,3); 
@@ -136,7 +136,7 @@ roiy=[];
 %% Load an ROI
 
 % load myroi matching desired experimental/ instrumental parameters
-load 'D:\myroi.mat'
+load 'myroi.mat'
 
 % display ROI outline
 if(exist('roix','var') && length(roix)>2)
@@ -146,7 +146,7 @@ if(exist('roix','var') && length(roix)>2)
         line(roix,roiy,'color','k','linestyle',':','linewidth',2);
     end
 end
-%% compute statistics for each slice
+%% compute and save statistics for each slice
 
 clear red green blue displaymask
 
@@ -161,7 +161,7 @@ if(exist('outfile','var'))
         mkdir(outdir);
     end
 end
-particletable=fopen([outdir outfile '_particles.txt'],'w');
+particletable=fopen(fullfile(outdir,[outfile '_particles.txt']),'w');
 
 % now gather values for selected slices
 for(theinputfile=myinputfiles)
@@ -169,13 +169,13 @@ for(theinputfile=myinputfiles)
     fprintf(1,'\n Inputfile %d',theinputfile);
        
     % read data from the current input image of interest
-    clear red green blue merged
-    merged=imread([indir inputfile(theinputfile).rgbfile]);
+    clear red green blue merged 
+    merged=imread(fullfile(indir,inputfile(theinputfile).rgbfile));
     red=merged(:,:,1);        
     green=merged(:,:,2); 
     blue=merged(:,:,3); 
 
-    % Apply correction factors
+    % Apply flat field correction factors (not used here)
     if(exist('ff_red','var'))
         red=uint16(double(red).*ff_red); 
     end
@@ -333,6 +333,7 @@ for(theinputfile=myinputfiles)
             line(roix,roiy,'color','w','linestyle','-','linewidth',2);
             line(roix,roiy,'color','k','linestyle',':','linewidth',2);
         end
+        drawnow();
     end
    
     % Copy values for current image file to inputfile structure
@@ -380,6 +381,8 @@ for(theinputfile=myinputfiles)
         % end of line
         fprintf(particletable,'\r\n');
     end
+
+    fprintf(1,' %d particles labeled, %d valid',length(validlabels),sum(validlabels));
     
     % Build up the union of the masks of (valid) labels for all images, for
     % diagnostic purposes
@@ -394,13 +397,14 @@ for(theinputfile=myinputfiles)
 
 end
 
+fprintf(1,'\n Complete: %d particles labeled, %d valid.\n',length([inputfile.validlabels]),sum([inputfile.validlabels]));
 fclose(particletable);
-save([outdir outfile '_data.mat'],'inputfile');
+save(fullfile(outdir,[outfile '_data.mat']),'inputfile');
 
 if(exist('displaymask','var'))
     figure(5);clf
     imshow(displaymask)
-    titlestr=['All labels, all files'];
+    titlestr=['All valid labels, all files'];
     text(0.02*max(xlim),0.02*max(ylim),titlestr,'color','w')
     % draw ROI box
     if(exist('roix','var') && length(roix)>2)
@@ -409,6 +413,7 @@ if(exist('displaymask','var'))
     end
 end
 
+%% cleanup
 clear red green blue redhist greenhist bluehist ratiohist
 clear validlabels labelratio labelred labelblue labelgreen 
 clear labelredhist labelgreenhist labelratiohist
