@@ -3,8 +3,15 @@
 % analysis, exemplified by analysis of true-color micrographs of
 % fluorescent beads, for which we are interested in comparison of the
 % intensity observed in the different color channels for each bead.
-% Greytak Chemistry Laboratory -- Example image from Lavigne Laboratory
-% University of South Carolina
+%
+% Attribution: Greytak Chemistry Laboratory - University of South Carolina.
+% Copyright Andrew B Greytak 2025 with applicable rights reserved by USC:
+% github.com/greytak-chemistry-lab/matlab-chemists-tutorial 
+% 
+% See matlab-chemists-tutorial/LICENSE.md file for license info 
+% 
+% Example image data and addn'l contributions from John Lavigne lab, USC
+
 
 % This script allows you to:
 % - load a single image from a file (demo is for 8-bit per channel)
